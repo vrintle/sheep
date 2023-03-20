@@ -143,17 +143,14 @@ class segtree {
 	vector<T> t;
 	int n;
 	T ldef, rdef;
-	function<T(T&, T&)> fx;
-	void build(int _n, T _ldef, T _rdef, function<T(T&, T&)> _fx) {
+	function<T(const T&, const T&)> fx;
+	void build(int _n, T _ldef, T _rdef, function<T(const T&, const T&)> _fx) {
 		n = 1;
 		while(n < _n) n *= 2;
 		ldef = _ldef, rdef = _rdef, fx = _fx;
 		t.assign(n * 2, rdef);
-		for(int i = n - 1; i > 0; i--) {
-			t[i] = fx(t[i * 2], t[i * 2 + 1]);
-		}
 	}
-	void update(int i, T v) {
+	void update(int i, const T& v) {
 		for(t[i += n] = v; i > 1; ) {
 			i /= 2;
 			t[i] = fx(t[i * 2], t[i * 2 + 1]);
@@ -164,12 +161,9 @@ class segtree {
 	T ask(int i, int tl, int tr, int l, int r) {
 		if(tl >= r) return rdef;
 		if(tr <= l) return ldef;
-		if(l <= tl && tr <= r) {
-			return t[i];
-		}
+		if(l <= tl && tr <= r) return t[i];
 		int tm = (tl + tr) >> 1;
-		T x, y;
-		return fx(x = ask(i * 2, tl, tm, l, r), y = ask(i * 2 + 1, tm, tr, l, r));
+		return fx(ask(i * 2, tl, tm, l, r), ask(i * 2 + 1, tm, tr, l, r));
 	}
 	T ask(int l, int r) {
 		return ask(1, 0, n, l, r);
@@ -204,7 +198,7 @@ class lazy {
 			b[i] = {b[i * 2].first, b[i * 2 + 1].second};
 		}
 	}
-	node fx(node& x, node& y) {
+	node fx(const node& x, const node& y) {
 		return node {
 			max({x.r, y.r, y.mx - x.mn}),
 			max(x.mx, y.mx),
@@ -220,23 +214,22 @@ class lazy {
 		}
 		d[i] = p[i] = 0;
 	}
-	node dev(int i, int tl, int tr, int l, int r, ll xx) {
+	node dev(int i, int tl, int tr, int l, int r, ll x) {
 		if(p[i]) push(i);
 		if(tl >= r || tr <= l) return t[i];
 		if(l <= tl && tr <= r) {
-			d[i] = xx;
+			d[i] = x;
 			p[i] = 1;
 			push(i);
 			return t[i];
 		}
 		int tm = (tl + tr) >> 1;
-		node x, y;
-		return (t[i] = fx(x = dev(i * 2, tl, tm, l, r, xx), y = dev(i * 2 + 1, tm, tr, l, r, xx)));
+		return (t[i] = fx(dev(i * 2, tl, tm, l, r, x), dev(i * 2 + 1, tm, tr, l, r, x)));
 	}
 	void dev(int l, int r, ll x) {
 		dev(1, 0, n, l, r, x);
 	}
-	node set(int i, int tl, int tr, int l, int r, node v) {
+	node set(int i, int tl, int tr, int l, int r, const node& v) {
 		if(p[i]) push(i);
 		if(tl >= r || tr <= l) return t[i];
 		if(l <= tl && tr <= r) {
@@ -244,25 +237,21 @@ class lazy {
 			return t[i];
 		}
 		int tm = (tl + tr) >> 1;
-		node x, y;
-		return (t[i] = fx(x = set(i * 2, tl, tm, l, r, v), y = set(i * 2 + 1, tm, tr, l, r, v)));
+		return (t[i] = fx(set(i * 2, tl, tm, l, r, v), set(i * 2 + 1, tm, tr, l, r, v)));
 	}
-	void set(int l, int r, node v) {
+	void set(int l, int r, const node& v) {
 		set(1, 0, n, l, r, v);
 	}
-	void set(int i, node v) {
+	void set(int i, const node& v) {
 		set(1, 0, n, i, i + 1, v);
 	}
 	node ask(int i, int tl, int tr, int l, int r) {
 		if(p[i]) push(i);
 		if(tl >= r) return rdef;
 		if(tr <= l) return ldef;
-		if(l <= tl && tr <= r) {
-			return t[i];
-		}
+		if(l <= tl && tr <= r) return t[i];
 		int tm = (tl + tr) >> 1;
-		node x, y;
-		return fx(x = ask(i * 2, tl, tm, l, r), y = ask(i * 2 + 1, tm, tr, l, r));
+		return fx(ask(i * 2, tl, tm, l, r), ask(i * 2 + 1, tm, tr, l, r));
 	}
 	node ask(int l, int r) {
 		return ask(1, 0, n, l, r);
@@ -275,7 +264,7 @@ void solve() {
 	F0(m, i) cin >> a[i];
 	F0(m, i) cin >> b[i];
 	F0(m, i) b.pb(b[i]);
-	st.build(2 * m, node{0, -inf, inf}, node{0, -inf, inf}, [&](auto& x, auto& y) {
+	st.build(2 * m, node{0, -inf, inf}, node{0, -inf, inf}, [&](const auto& x, const auto& y) {
 		return node {
 			max({x.r, y.r, y.mx - x.mn}),
 			max(x.mx, y.mx),
@@ -298,7 +287,7 @@ void solve() {
 			cin >> k;
 			ll d = (k - l + m) % m;
 			st2.dev(l, r, d);
-			cout << st2.t[1].r << '\n';
+			// cout << st2.t[1].r << '\n';
 		} else {
 			cout << st2.ask(l, r).r << '\n';
 		}
