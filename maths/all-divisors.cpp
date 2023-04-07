@@ -119,8 +119,8 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
     if (x < 10) return o << (char)(x + '0');
     return o << x / 10 << (char)(x % 10 + '0');
 } */
- 
-ll sieve_size = 100000, facto_size = 0;
+
+ll sieve_size = 0, facto_size = 0;
 vector<ll> F(facto_size+1);
 vector<bool> state(sieve_size+1, 1);
 // exp() for (N^K)%M is only valid, when N%M != 0, else return 0
@@ -131,58 +131,65 @@ void facto(ll n=facto_size,ll m=M){F[0]=1;F1(n,i)F[i]=(F[i-1]*i)%m;}
 void sieve(ll n=sieve_size){for(ll i=4;i<=n;i+=2)state[i]=0;for(ll i=3;i<=n;i+=2)for(ll j=i*i;j<=n;j+=i)state[j]=0;}
 // when floor(-1 / 4) = -1, use this one
 template<class T>T fdivf(T a,T b){return a/b-((a^b)<0&&a%b);}
- 
-vl pr;
+
+const int N = 5e5 + 7;
+vl fac[N];
+
 void precum() {
-	for(ll i = 2; i < sieve_size; i++) {
-		if(state[i]) pr.pb(i);
+	for(ll i = 1; i < N; i++) {
+		for(ll j = i; j < N; j += i) {
+			fac[j].pb(i);
+		}
 	}
 }
 
-void solve() {
-	ll a, b, c, d;
-	cin >> a >> b >> c >> d;
-	ll _a = a, _b = b;
-	map<ll, ll> cnt;
-	for(ll i = 0; pr[i] * pr[i] <= _a; i++) {
-		while(_a % pr[i] == 0) _a /= pr[i], cnt[pr[i]]++;
-	}
-	if(_a > 1) cnt[_a]++;
-	for(ll i = 0; pr[i] * pr[i] <= _b; i++) {
-		while(_b % pr[i] == 0) _b /= pr[i], cnt[pr[i]]++;
-	}
-	if(_b > 1) cnt[_b]++;
-	debug(cnt);
+/* vl get(ll k) {
+	debug(k);
 	vpl v;
-	each(cnt) v.pb(e);
+	while(k > 1) {
+		ll c = 0, x = lp[k];
+		while(k % x == 0) k /= x, c++;
+		v.pb({x, c});
+	}
+	debug(v);
 	ll m = sz(v);
-	vl fct {1};
+	vl fac {1};
 	for(ll i = 0; i < m; i++) {
-		vl nfct = fct;
+		ll z = sz(fac);
 		for(ll j = 1, x = v[i].F; j <= v[i].S; j++, x *= v[i].F) {
-			each(fct) nfct.pb(x * e);
-		}
-		swap(nfct, fct);
-	}
-	debug(fct);
-	each(fct) {
-		ll other = (a * b) / e, k1 = (a + e) / e, k2 = c / e;
-		if(k1 <= k2) {
-			ll k3 = (b + other) / other, k4 = d / other;
-			if(k3 <= k4) {
-				cout << k1 * e << ' ' << k3 * other;
-				return ;
-			}
+			for(ll l = 0; l < z; l++) fac.pb(x * fac[l]);
 		}
 	}
-	cout << -1 << ' ' << -1;
+	debug(fac);
+	return fac;
+} */
+
+void solve() {
+	ll a, b, m1, m2;
+	cin >> a >> b >> m1 >> m2;
+	if(a > b) swap(a, b), swap(m1, m2);
+	if(a < m1 || b < m2) return void(cout << -1);
+	if(a == m1) {
+		if(b == m2) return void(cout << b + 1);
+		ll g = b - m2;
+		ll ans = inf;
+		for(auto& e: fac[g]) {
+			if(e > a && b % e == m2) ans = min(ans, e);
+		}
+		cout << (ans == inf ? -1 : ans);
+		return ;
+	} else if(b == m2) return void(cout << -1);
+	ll g = __gcd(a - m1, b - m2), ans = inf;
+	for(auto& e: fac[g]) {
+		if(a % e == m1 && b % e == m2) ans = min(ans, e);
+	}
+	cout << (ans == inf ? -1 : ans);
 }
 
 int32_t main() {
 	auto start = high_resolution_clock::now();
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	sieve();
 	precum();
 	ll t = 1;
 	cin >> t;
