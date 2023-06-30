@@ -133,7 +133,7 @@ void sieve(ll n=sieve_size){for(ll i=4;i<=n;i+=2)state[i]=0;for(ll i=3;i<=n;i+=2
 template<class T>T fdivf(T a,T b){return a/b-((a^b)<0&&a%b);}
 
 template<typename T>
-class st {
+class sparse {
 	public:
 	vector<vector<T>> t;
 	int n, m;
@@ -163,7 +163,7 @@ void solve() {
 	cin >> n >> s;
 	vl pfx(n + 1);
 	F0(n, i) pfx[i + 1] = pfx[i] + (s[i] == '(' ? 1 : -1);
-	st<ll> Min;
+	sparse<ll> Min;
 	Min.build(n + 1, pfx);
 	ll ans = 0;
 	for(ll i = 1; i <= n; i++) {
