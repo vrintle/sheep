@@ -1,3 +1,5 @@
+// https://www.codechef.com/CONT2023/problems/WATEREVERY
+
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace std;
