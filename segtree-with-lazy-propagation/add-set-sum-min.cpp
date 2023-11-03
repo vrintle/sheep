@@ -141,7 +141,7 @@ class lazy {
 	int n;
 	lazy(int _n) : n(1) {
 		while(n < _n) n *= 2;
-		t.assign(n * 2, {0, inf});
+		t.assign(n * 2, {0, 0});
 		v.assign(n * 2, {0, 0});
 		p.assign(n * 2, 0);
 		cnt.assign(n * 2, 0);
