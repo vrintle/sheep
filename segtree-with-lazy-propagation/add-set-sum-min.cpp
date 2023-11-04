@@ -210,7 +210,7 @@ class lazy {
 	}
 	pair<long long, long long> ask(int i, int tl, int tr, int l, int r) {
 		if(p[i]) push(i);
-		if(tl >= r || tr <= l) return {0, inf};
+		if(tl >= r || tr <= l) return {0, 0};
 		if(l <= tl && tr <= r) return t[i];
 		int tm = (tl + tr) >> 1;
 		return fx(ask(i * 2, tl, tm, l, r), ask(i * 2 + 1, tm, tr, l, r));
