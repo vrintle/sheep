@@ -96,76 +96,32 @@ ll nCr(ll n,ll r,ll m=M){return r?(F[n]*imod(F[r],m)%m*imod(F[n-r],m)%m)%m:1;}
 void facto(ll n=facto_size,ll m=M){F[0]=1;F1(n,i)F[i]=(F[i-1]*i)%m;}
 void sieve(ll n=sieve_size){for(ll i=4;i<=n;i+=2)state[i]=0;for(ll i=3;i<=n;i+=2)for(ll j=i*i;j<=n;j+=i)state[j]=0;}
 
-class DSU {
-public:
-	vl head;
-	vl size;
-	DSU(ll n) {
-		head.assign(n + 1, 0);
-		size.assign(n + 1, 1);
-		F1(n, i) {
-			head[i] = i;
-		}
-	}
-	ll get(ll x) {
-		if(x != head[x]) {
-			head[x] = get(head[x]);
-		}
-		return head[x];	
-	}
-	void U(ll a, ll b) {
-		// we'll assume a as "head"
-		a = get(a);
-		b = get(b);
-		if(a == b) return ;
-		if(size[a] < size[b]) swap(a, b);
-		head[b] = a;
-		size[a] += size[b];
-	}
-};
-
 void solve() {
-    auto random = [&](ll low, ll high) {
-        ll x = rand();
-        x = (x % (high - low + 1)) + low;
-        return x;
-    };
-	ll N = 1000, Q = N;
-    cout << N << ' ' << Q << '\n';
-    for(int i = 0; i < N; i++) {
-        int x = random(1, N);
-        cout << x << ' ';
-    }
-    cout << endl;
-    DSU dsu(N);
-    set<pl> edges;
-    set<ll> queries;
-    while(sz(edges) < N - 1) {
-        int u = random(1, N), v = random(1, N);
-        if(dsu.get(u) != dsu.get(v)) {
-            edges.insert({u, v});
-            dsu.U(u, v);
-        }
-    }
-    each(edges) {
-        cout << e.F << ' ' << e.S << '\n';
-    }
-    while(sz(queries) < Q) {
-        ll x = random(1, N);
-        queries.insert(x);
-    }
-    each(queries) {
-        cout << e << '\n';
-    }
+	auto random = [&](ll low, ll high) {
+		ll x = rand();
+		x = (x % (high - low + 1)) + low;
+		return x;
+	};
+	ll N = random(1, 200000);
+	cout << N << '\n';
+	for(int i = 0; i < N; i++) {
+		int x = random(1, N);
+		cout << x << ' ';
+	}
+	cout << endl;
+	for(int i = 2; i <= N; i++) {
+		int j = random(1, i - 1);
+		cout << j << ' ' << i << '\n';
+	}
 }
 
 int32_t main() {
 	auto start = high_resolution_clock::now();
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-    srand(time(nullptr));
-    freopen("../testcases/graph_10.in", "w", stdout);
-	ll t = 500;
+  srand(time(nullptr));
+  freopen("./tests/tree_0.txt", "w", stdout);
+	ll t = 1;
 	cout << t << endl;
 	F1(t, i) {
 		// google
@@ -173,6 +129,6 @@ int32_t main() {
 	}
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);
-	debug(duration.count(), " µs!");
+	// debug(duration.count(), " µs!");
 	return 0;
 }
