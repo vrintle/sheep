@@ -1,264 +1,295 @@
-//////////////////////////////////////////////////////////////////
-/////                                                           //
-////  Credits: Rahul Verma (CC @vrintle, CF @BlindingKnight)   ///
-///  Institution: Delhi Technological University (aka. DCE)   ////
-//                                                           /////
-//////////////////////////////////////////////////////////////////
+// Author: vrintle (Rahul Verma)
+// Problem: https://codeforces.com/contest/558/problem/E
 
-#include <chrono>
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace std;
-using namespace chrono;
 using namespace __gnu_pbds;
 
-template <typename T> using pbds = tree<T, null_type,
-	less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-// find_by_order(K): Returns an iterator to the Kth largest element (counting from zero)
-// order_of_key (K): Returns the number of items that are strictly smaller than K
+template <typename T> using pbds = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
-/*
-
-                ~ You don't know the power of the dark side! ~
-
-..-..,'".-     BM\dF. jM@'    !MMM.&^'jjjM#*..`.              !*m.F.    `.....
--`.'^-".^.   ._'-".   ``       `"#.# .]MF.      _.  __-gg..      jMg.   ......
-'......._   j#M' jMf       jg_jm..-`  .Mf_ ja   "`  .`  `^" ,_ 4g."@!.  ...,.,
-',3&^jCgf ._`"`"'.         .` """!.   .`^^       .....        .""LTgJf.  =/<.,
-_@#MMQK##-@"^                         ..                         .'QK_. .!$AGz
-MM&&#0$#yF.                          !-M.    .gmMM@!               ."q. ..K#MD
-ZM#ZM#$.                             q4M.    ..__,,yg_.              ^\. ..M0#
-A0NWM@.                    jggp.    .,m*      .#MMMMM#'..              '  ."M0
-BMM$@"                     !MM#'..   -*'      ."QMMMM#`..                 ..^$
-BMMM'                      .^@#.'`   _     ,yy___````.                     . `
-MMMP                        ...  j.  1.L   .""9*qwwwJ,.                     ..
-@@@.                   .     ...P`,  .F`            .`.                     ..
-0T`                   .P. . F`      :"~~-  ._.e.,wyyw..,,....
-yg.                             '  _g0M0g. .-'`'^`Q$_
-Mf                                .jMMMMML    .`-"0M#
-@.                              . ."MMMM@^        ."".
-f                              .    -.            ...
-.                             .                 ._  ...
-                            .           .        .    ..
-                       ..  -'          .,              ..,   ..,.
-                        `.          . ..*. . _     ,   .p_ .-,'jb.
-_                     jgg, -'-+..--!.!!!` !' .~.      _0MM/.-.-/@.   .yyygggMM
-M0gyy__________.      ^0M'                            "MM^  ...".     `^MMMMMM
-MMMMMMMMMMMMMM'.                                                   ..        .
-
-*/
-
-#define F first
-#define S second
-#define db double
-#define ld long db
-#define M 1000000007
-#define pb push_back
-#define ll long long
-#define lll __int128
-#define vl vector<ll>
-#define vd vector<db>
-#define vld vector<ld>
-#define vvl vector<vl>
-#define pl pair<ll,ll>
-#define pd pair<db,db>
-#define vpl vector<pl>
-#define vpd vector<pd>
-#define lld __float128
-#define ull unsigned ll
-#define sz(a) ((ll) a.size())
-#define PI 3.141592653589793238
+#define int int64_t
+#define endl '\n'
+#define sz(v) ((int) v.size())
 #define all(v) v.begin(), v.end()
-#define each(seq) for(auto e: seq)
-#define inf numeric_limits<ll>::max()
-#define acc(a) accumulate(all(a), 0ll)
-#define shuff(a) random_shuffle(all(a))
-#define F0(n, i) for(ll i = 0; i < n; i++)
-#define F1(n, i) for(ll i = 1; i <= n; i++)
-#define google cout << "Case #" << i << ": ";
-#define dbgpr(pr) cout << ' ' << #pr << " {" << pr.F << ',' << pr.S << "} "
-#define dbgprs(seq) cout << #seq << " <"; each(seq) { dbgpr(e); } cout << ">\n"
-#define dbgarr(seq) cout << #seq << " < "; each(seq) { cout << e << ' '; } cout << ">\n"
-#define dbgmtx(mat) cout << #mat << " {\n"; each(mat) { cout << ' '; dbgarr(e); } cout << "}\n"
-#define lrot(a, l, r, k) rotate(a.begin() + l, a.begin() + l + (k % (r - l + 1)), a.begin() + r + 1)
-#define rrot(a, l, r, k) rotate(a.begin() + l, a.begin() + r + 1 - (k % (r - l + 1)), a.begin() + r + 1)
-#define dbgmap(hash) cout << #hash << " { "; each(hash) { cout << e.first << ':' << e.second << ' '; } cout << "}\n"
-#define dbgtree(tree) cout << #tree << " {\n"; each(tree) { cout << e.first << ": "; dbgarr(e.second); } cout << "}\n"
+#define vi vector<int>
+#define pii pair<int, int>
+#define inf 2e18
+#define rep(n) for(int _ = 0; _ < n; _++)
 
-// Debug Template, copied from Mikel_Arteta_8 (https://codeforces.com/blog/entry/68809)
-void __print(int x) {cerr << x;}
-void __print(long x) {cerr << x;}
-void __print(long long x) {cerr << x;}
-void __print(unsigned x) {cerr << x;}
-void __print(unsigned long x) {cerr << x;}
-void __print(unsigned long long x) {cerr << x;}
-void __print(float x) {cerr << x;}
-void __print(double x) {cerr << x;}
-void __print(long double x) {cerr << x;}
-void __print(char x) {cerr << '\'' << x << '\'';}
-void __print(const char *x) {cerr << '\"' << x << '\"';}
-void __print(const string &x) {cerr << '\"' << x << '\"';}
-void __print(bool x) {cerr << (x ? "true" : "false");}
-template<typename T, typename V>
-void __print(const pair<T, V> &x) {cerr << '{'; __print(x.first); cerr << ','; __print(x.second); cerr << '}';}
-template<typename T>
-void __print(const T &x) {int f = 0; cerr << '{'; for (auto &i: x) cerr << (f++ ? "," : ""), __print(i); cerr << "}";}
-void _print() {cerr << "]\n";}
-template <typename T, typename... V>
-void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
-#ifdef VRINTLE
-#define debug(x...) cerr << "[" << #x << "] = ["; _print(x)
-#else
-#define debug(x...)
-#endif
-// End of debugging template
+int max(int x, int y) { return x > y ? x : y; }
+int min(int x, int y) { return x < y ? x : y; }
 
-/* ostream& operator<<(ostream& o, const __int128& x) {
-    if (x == numeric_limits<__int128>::min()) return o << "-170141183460469231731687303715884105728";
-    if (x < 0) return o << "-" << -x;
-    if (x < 10) return o << (char)(x + '0');
-    return o << x / 10 << (char)(x % 10 + '0');
-} */
+// S: return type, op: how to merge at return, e: S default constructor
+// F: value type of lazy value
+// mapping: called on apply() to each item, mapping(F f, S item)
+// composition: called on apply() to lazy value of a seg, composition(F f, F lazy)
+// id: default falue of lazy value
 
-ll sieve_size = 0, facto_size = 0;
-vector<ll> F(facto_size+1);
-vector<bool> state(sieve_size+1, 1);
-// exp() for (N^K)%M is only valid, when N%M != 0, else return 0
-ll exp(ll n,ll k,ll m=M){ll r=1,a=n%m;do{r=k&1?r*a%m:r;a=a*a%m;}while(k/=2);return r;}
-ll imod(ll a,ll m=M){return exp(a,m-2,m)%m;}
-ll C(ll n,ll r,ll m=M){return r?(F[n]*imod(F[r],m)%m*imod(F[n-r],m)%m)%m:1;}
-void facto(ll n=facto_size,ll m=M){F[0]=1;F1(n,i)F[i]=(F[i-1]*i)%m;}
-void sieve(ll n=sieve_size){for(ll i=4;i<=n;i+=2)state[i]=0;for(ll i=3;i<=n;i+=2)for(ll j=i*i;j<=n;j+=i)state[j]=0;}
-// when floor(-1 / 4) = -1, use this one
-template<class T>T fdivf(T a,T b){return a/b-((a^b)<0&&a%b);}
-
-class lazy {
-	public:
-	vector<long long> t, cnt;
-	vector<pair<long long, long long>> v, b;
-	vector<bool> p;
-	int n;
-	void build(int _n) {
-		n = 1;
-		while(n < _n) n *= 2;
-		t.assign(n * 2, 0);
-		v.assign(n * 2, {0, 0});
-		b.assign(n * 2, {0, 0});
-		p.assign(n * 2, 0);
-		cnt.assign(n * 2, 0);
-		for(int i = 0; i < _n; i++) cnt[i + n] = 1;
-		for(int i = n - 1; i > 0; i--) cnt[i] = cnt[i * 2] + cnt[i * 2 + 1];
-	}
-	void push(int i) {
-		if(b[i].second) t[i] = v[i].second * cnt[i];
-		if(b[i].first) t[i] += v[i].first * cnt[i];
-		if(i < n) {
-			p[i * 2] = p[i * 2 + 1] = 1;
-			if(b[i].second) {
-				v[i * 2] = v[i * 2 + 1] = v[i];
-				b[i * 2].second = b[i * 2 + 1].second = 1;
-			} else {
-				v[i * 2].first += v[i].first;
-				v[i * 2 + 1].first += v[i].first;
-				b[i * 2].first = b[i * 2 + 1].first = 1;
-			}
-		}
-		b[i] = {0, 0};
-		v[i] = {0, 0};
-		p[i] = 0;
-	}
-	// tr and r is 1 indexed
-	long long add(int i, int tl, int tr, int l, int r, int x) {
-		if(p[i]) push(i);
-		if(tl >= r || tr <= l) return t[i];
-		if(l <= tl && tr <= r) {
-			p[i] = 1;
-			v[i] = {x, 0};
-			b[i] = {1, 0};
-			push(i);
-			return t[i];
-		}
-		int tm = (tl + tr) >> 1;
-		return (t[i] = add(i * 2, tl, tm, l, r, x) + add(i * 2 + 1, tm, tr, l, r, x));
-	}
-	void add(int l, int r, int x) {
-		add(1, 0, n, l, r, x);
-	}
-	void add(int i, int x) {
-		add(1, 0, n, i, i + 1, x);
-	}
-	long long set(int i, int tl, int tr, int l, int r, int x) {
-		if(p[i]) push(i);
-		if(tl >= r || tr <= l) return t[i];
-		if(l <= tl && tr <= r) {
-			p[i] = 1;
-			v[i] = {0, x};
-			b[i] = {0, 1};
-			push(i);
-			return t[i];
-		}
-		int tm = (tl + tr) >> 1;
-		return (t[i] = set(i * 2, tl, tm, l, r, x) + set(i * 2 + 1, tm, tr, l, r, x));
-	}
-	void set(int l, int r, int x) {
-		set(1, 0, n, l, r, x);
-	}
-	void set(int i, int x) {
-		set(1, 0, n, i, i + 1, x);
-	}
-	long long sum(int i, int tl, int tr, int l, int r) {
-		if(p[i]) push(i);
-		if(tl >= r || tr <= l) return 0;
-		if(l <= tl && tr <= r) return t[i];
-		int tm = (tl + tr) >> 1;
-		return sum(i * 2, tl, tm, l, r) + sum(i * 2 + 1, tm, tr, l, r);
-	}
-	long long sum(int l, int r) {
-		return sum(1, 0, n, l, r);
-	}
-	long long sum(int i) {
-		return sum(1, 0, n, i, i + 1);
-	}
+template <class S, S (*op)(S, S), S (*e)(), class F, S (*mapping)(F, S), F (*composition)(F, F), F (*id)()>
+struct lazy_segtree {
+  public:
+    lazy_segtree() : lazy_segtree(0) {}
+    explicit lazy_segtree(int n) : lazy_segtree(std::vector<S>(n, e())) {}
+    explicit lazy_segtree(const std::vector<S>& v) : _n(int(v.size())) {
+        log = 0;
+        while ((1 << log) < _n) ++log;
+        size = 1 << log;
+        d = std::vector<S>(2 * size, e());
+        lz = std::vector<F>(size, id());
+        for (int i = 0; i < _n; i++) d[size + i] = v[i];
+        for (int i = size - 1; i >= 1; i--) {
+            update(i);
+        }
+    }
+ 
+    void set(int p, S x) {
+        assert(0 <= p && p < _n);
+        p += size;
+        for (int i = log; i >= 1; i--) push(p >> i);
+        d[p] = x;
+        for (int i = 1; i <= log; i++) update(p >> i);
+    }
+ 
+    S get(int p) {
+        assert(0 <= p && p < _n);
+        p += size;
+        for (int i = log; i >= 1; i--) push(p >> i);
+        return d[p];
+    }
+ 
+    S prod(int l, int r) {
+        assert(0 <= l && l <= r && r <= _n);
+        if (l == r) return e();
+ 
+        l += size;
+        r += size;
+ 
+        for (int i = log; i >= 1; i--) {
+            if (((l >> i) << i) != l) push(l >> i);
+            if (((r >> i) << i) != r) push((r - 1) >> i);
+        }
+ 
+        S sml = e(), smr = e();
+        while (l < r) {
+            if (l & 1) sml = op(sml, d[l++]);
+            if (r & 1) smr = op(d[--r], smr);
+            l >>= 1;
+            r >>= 1;
+        }
+ 
+        return op(sml, smr);
+    }
+ 
+    S all_prod() { return d[1]; }
+ 
+    void apply_single(int p, F f) {
+        assert(0 <= p && p < _n);
+        p += size;
+        for (int i = log; i >= 1; i--) push(p >> i);
+        d[p] = mapping(f, d[p]);
+        for (int i = 1; i <= log; i++) update(p >> i);
+    }
+    void apply(int l, int r, F f) {
+        assert(0 <= l && l <= r && r <= _n);
+        if (l == r) return;
+ 
+        l += size;
+        r += size;
+ 
+        for (int i = log; i >= 1; i--) {
+            if (((l >> i) << i) != l) push(l >> i);
+            if (((r >> i) << i) != r) push((r - 1) >> i);
+        }
+ 
+        {
+            int l2 = l, r2 = r;
+            while (l < r) {
+                if (l & 1) all_apply(l++, f);
+                if (r & 1) all_apply(--r, f);
+                l >>= 1;
+                r >>= 1;
+            }
+            l = l2;
+            r = r2;
+        }
+ 
+        for (int i = 1; i <= log; i++) {
+            if (((l >> i) << i) != l) update(l >> i);
+            if (((r >> i) << i) != r) update((r - 1) >> i);
+        }
+    }
+ 
+    template <bool (*g)(S)> int max_right(int l) {
+        return max_right(l, [](S x) { return g(x); });
+    }
+    template <class G> int max_right(int l, G g) {
+        assert(0 <= l && l <= _n);
+        assert(g(e()));
+        if (l == _n) return _n;
+        l += size;
+        for (int i = log; i >= 1; i--) push(l >> i);
+        S sm = e();
+        do {
+            while (l % 2 == 0) l >>= 1;
+            if (!g(op(sm, d[l]))) {
+                while (l < size) {
+                    push(l);
+                    l = (2 * l);
+                    if (g(op(sm, d[l]))) {
+                        sm = op(sm, d[l]);
+                        l++;
+                    }
+                }
+                return l - size;
+            }
+            sm = op(sm, d[l]);
+            l++;
+        } while ((l & -l) != l);
+        return _n;
+    }
+ 
+    template <bool (*g)(S)> int min_left(int r) {
+        return min_left(r, [](S x) { return g(x); });
+    }
+    template <class G> int min_left(int r, G g) {
+        assert(0 <= r && r <= _n);
+        assert(g(e()));
+        if (r == 0) return 0;
+        r += size;
+        for (int i = log; i >= 1; i--) push((r - 1) >> i);
+        S sm = e();
+        do {
+            r--;
+            while (r > 1 && (r % 2)) r >>= 1;
+            if (!g(op(d[r], sm))) {
+                while (r < size) {
+                    push(r);
+                    r = (2 * r + 1);
+                    if (g(op(d[r], sm))) {
+                        sm = op(d[r], sm);
+                        r--;
+                    }
+                }
+                return r + 1 - size;
+            }
+            sm = op(d[r], sm);
+        } while ((r & -r) != r);
+        return 0;
+    }
+ 
+  private:
+    int _n, size, log;
+    std::vector<S> d;
+    std::vector<F> lz;
+ 
+    void update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }
+    void all_apply(int k, F f) {
+        d[k] = mapping(f, d[k]);
+        if (k < size) lz[k] = composition(f, lz[k]);
+    }
+    void push(int k) {
+        all_apply(2 * k, lz[k]);
+        all_apply(2 * k + 1, lz[k]);
+        lz[k] = id();
+    }
 };
 
-void solve() {
-	ll n, q;
-	cin >> n >> q;
-	vl a(n);
-	F0(n, i) cin >> a[i];
-	lazy st(n);
-	F0(n, i) {
-		st.set(i, a[i]);
-		// debug(st.v);
-	}
-	while(q--) {
-		ll t, l, r;
-		cin >> t >> l >> r;
-		if(t == 1) {
-			ll x; cin >> x;
-			st.add(l - 1, r, x);
-		} else if(t == 2) {
-			ll x; cin >> x;
-			st.set(l - 1, r, x);
-		} else {
-			cout << st.sum(l - 1, r) << '\n';
-		}
-		debug(st.t);
-	}
+// S: return type, op: how to merge at return, e: S default constructor
+// F: value type of lazy value
+// mapping: called on apply() to each item, mapping(F f, S item)
+// composition: called on apply() to lazy value of a seg, composition(F f, F lazy)
+// id: default falue of lazy value
+// template <class S, S (*op)(S, S), S (*e)(), class F, S (*mapping)(F, S), F (*composition)(F, F), F (*id)()>
+
+struct S {
+	int val, size;
+};
+S op(S l, S r) {
+	return S{l.val + r.val, l.size + r.size};
+}
+// NOTE: default node should be such that it doesn't affect other nodes
+S e() {
+	return S{0, 1};
+}
+struct F {
+	int type, val;
+	// type: 0 for set, 1 for add
+};
+S mapping(F f, S e) {
+	return f.type ? S{e.val + f.val * e.size, e.size} : S{f.val * e.size, e.size};
+}
+F composition(F next, F prev) {
+	if(next.type == 0 && prev.type == 0) return F{0, next.val};
+	if(next.type == 0 && prev.type == 1) return F{0, next.val};
+	if(next.type == 1 && prev.type == 0) return F{0, prev.val + next.val};
+	return F{1, prev.val + next.val};
+}
+// NOTE: default function should be such that it doesn't affect the node
+F id() {
+	return F{1, 0};
 }
 
+const int N = 26;
+lazy_segtree<S, op, e, F, mapping, composition, id> st[N];
+
+void solve() {
+	int n, m;
+	string s;
+	cin >> n >> m >> s;
+	for(int c = 0; c < N; c++) {
+		st[c] = lazy_segtree<S, op, e, F, mapping, composition, id>(n);
+	}
+	for(int i = 0; i < n; i++) {
+		st[s[i] - 'a'].apply(i, i + 1, F{1, 1});
+	}
+	while(m--) {
+		int l, r, t;
+		cin >> l >> r >> t;
+		l--;
+		if(t) {
+			int curr = l;
+			for(int c = 0; c < N; c++) {
+				int cnt = st[c].prod(l, r).val;
+				st[c].apply(l, r, F{0, 0});
+				st[c].apply(curr, curr + cnt, F{1, 1});
+				curr += cnt;
+			}
+		} else {
+			int curr = l;
+			for(int c = N - 1; c >= 0; c--) {
+				int cnt = st[c].prod(l, r).val;
+				st[c].apply(l, r, F{0, 0});
+				st[c].apply(curr, curr + cnt, F{1, 1});
+				curr += cnt;
+			}			
+		}
+	}
+	string ans(n, '_');
+	for(char c = 'a'; c <= 'z'; c++) {
+		for(int i = 0; i < n; i++) {
+			if(st[c - 'a'].prod(i, i + 1).val > 0) ans[i] = c;
+		}
+	}
+	cout << ans;
+}
+
+// PRE-SUBMIT CHECKLIST
+// --------------------
+//
+// -- reset the global arrays
+// -- sort vector of vectors carefully
+// more to be added...
+
 int32_t main() {
-	auto start = high_resolution_clock::now();
 	ios_base::sync_with_stdio(false);
 	cin.tie(NULL);
-	ll t = 1;
+	int t = 1;
 	// cin >> t;
-	F1(t, i) {
-		// google
+	while(t--) {
 		solve();
+		cout << endl;
+		// cerr << endl;
 	}
-	auto stop = high_resolution_clock::now();
-	auto duration = duration_cast<microseconds>(stop - start);
-	debug(duration.count(), " µs!");
 	return 0;
 }
