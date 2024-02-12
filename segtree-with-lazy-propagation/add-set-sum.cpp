@@ -20,6 +20,8 @@ template <typename T> using pbds = tree<T, null_type, less<T>, rb_tree_tag, tree
 int max(int x, int y) { return x > y ? x : y; }
 int min(int x, int y) { return x < y ? x : y; }
 
+// https://atcoder.github.io/ac-library/production/document_en/lazysegtree.html
+// https://cses.fi/problemset/task/1735
 // S: return type, op: how to merge at return, e: S default constructor
 // F: value type of lazy value
 // mapping: called on apply() to each item, mapping(F f, S item)
