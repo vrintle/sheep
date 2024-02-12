@@ -178,6 +178,9 @@ class lazy {
 	void add(int l, int r, int x) {
 		add(1, 0, n, l, r, x);
 	}
+	void add(int i, int x) {
+		add(1, 0, n, i, i + 1, x);
+	}
 	long long set(int i, int tl, int tr, int l, int r, int x) {
 		if(p[i]) push(i);
 		if(tl >= r || tr <= l) return t[i];
@@ -205,6 +208,9 @@ class lazy {
 	}
 	long long sum(int l, int r) {
 		return sum(1, 0, n, l, r);
+	}
+	long long sum(int i) {
+		return sum(1, 0, n, i, i + 1);
 	}
 };
 
