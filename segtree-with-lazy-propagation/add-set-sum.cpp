@@ -135,30 +135,35 @@ template<class T>T fdivf(T a,T b){return a/b-((a^b)<0&&a%b);}
 class lazy {
 	public:
 	vector<long long> t, cnt;
-	vector<pair<long long, long long>> v;
+	vector<pair<long long, long long>> v, b;
 	vector<bool> p;
 	int n;
-	lazy(int _n) : n(1) {
+	void build(int _n) {
+		n = 1;
 		while(n < _n) n *= 2;
 		t.assign(n * 2, 0);
 		v.assign(n * 2, {0, 0});
+		b.assign(n * 2, {0, 0});
 		p.assign(n * 2, 0);
 		cnt.assign(n * 2, 0);
 		for(int i = 0; i < _n; i++) cnt[i + n] = 1;
 		for(int i = n - 1; i > 0; i--) cnt[i] = cnt[i * 2] + cnt[i * 2 + 1];
 	}
 	void push(int i) {
-		if(v[i].second) t[i] = v[i].second * cnt[i];
-		if(v[i].first) t[i] += v[i].first * cnt[i];
+		if(b[i].second) t[i] = v[i].second * cnt[i];
+		if(b[i].first) t[i] += v[i].first * cnt[i];
 		if(i < n) {
 			p[i * 2] = p[i * 2 + 1] = 1;
-			if(v[i].second) {
+			if(b[i].second) {
 				v[i * 2] = v[i * 2 + 1] = v[i];
+				b[i * 2].second = b[i * 2 + 1].second = 1;
 			} else {
 				v[i * 2].first += v[i].first;
 				v[i * 2 + 1].first += v[i].first;
+				b[i * 2].first = b[i * 2 + 1].first = 1;
 			}
 		}
+		b[i] = {0, 0};
 		v[i] = {0, 0};
 		p[i] = 0;
 	}
@@ -169,6 +174,7 @@ class lazy {
 		if(l <= tl && tr <= r) {
 			p[i] = 1;
 			v[i] = {x, 0};
+			b[i] = {1, 0};
 			push(i);
 			return t[i];
 		}
@@ -187,6 +193,7 @@ class lazy {
 		if(l <= tl && tr <= r) {
 			p[i] = 1;
 			v[i] = {0, x};
+			b[i] = {0, 1};
 			push(i);
 			return t[i];
 		}
