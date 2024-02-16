@@ -1,72 +1,24 @@
-#include <vector>
-#include <map>
-#include <unordered_map>
-#include <set>
-#include <algorithm>
-#include <list>
-#include <iterator>
-#include <iostream>
-#include <string>
-#include <random>
-#include <cmath>
-#include <stack>
+// Author: vrintle (Rahul Verma)
+// Problem: https://codeforces.com/problemset/problem/915/E
+
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace std;
 using namespace __gnu_pbds;
-typedef long long ll;
-typedef pair<ll, ll> pll;
-typedef pair<double, double> pdd;
-typedef vector<ll> vll;
-typedef vector<double> vd;
-typedef vector<vll> vvll;
-typedef vector<pll> vpll;
-typedef vector<pdd> vpdd;
-typedef vector<vd> vvd;
+
 template <typename T> using pbds = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-#define yn(ans) printf("%s\n", (ans)?"Yes":"No");
-#define YN(ans) printf("%s\n", (ans)?"YES":"NO");
-template<class T> bool chmax(T &a, T b) {
-	if (a >= b) return false;
-	a = b; return true;
-}
-template<class T> bool chmin(T &a, T b) {
-	if (a <= b) return false;
-	a = b; return true;
-}
-int max(int x, int y) { return x > y ? x : y; }
-int min(int x, int y) { return x < y ? x : y; }
-#define FOR(i, s, e, t) for ((i) = (s); (i) < (e); (i) += (t)) 
-#define REP(i, e) for (int i = 0; i < (e); ++i) 
-#define REP1(i, s, e) for (int i = (s); i < (e); ++i)
-#define RREP(i, e) for (int i = (e); i >= 0; --i)
-#define RREP1(i, e, s) for (int i = (e); i >= (s); --i)
+
 #define int int64_t
+#define endl '\n'
+#define sz(v) ((int) v.size())
+#define all(v) v.begin(), v.end()
 #define vi vector<int>
 #define pii pair<int, int>
-#define all(v) v.begin(), v.end()
-#define pb push_back
-#define qb pop_back
-#define pf push_front
-#define qf pop_front
-#define maxe max_element
-#define mine min_element
-#define endl '\n'
 #define inf 2e18
-#define sz(v) ((int) v.size())
-#define DEBUG printf("%d\n", __LINE__); fflush(stdout);
-template<class T> void print(vector<T> &v, bool withSize = false) {
-	if (withSize) cout << v.size() << endl;
-	REP(i, v.size()) cout << v[i] << " "; 
-	cout << endl;
-}
+#define rep(n) for(int _ = 0; _ < n; _++)
 
-int __FAST_IO__ = []() {
-	std::ios::sync_with_stdio(0);
-	std::cin.tie(0);
-	std::cout.tie(0);
-	return 0;
-}();
+int max(int x, int y) { return x > y ? x : y; }
+int min(int x, int y) { return x < y ? x : y; }
 
 // https://atcoder.github.io/ac-library/production/document_en/lazysegtree.html
 // https://cses.fi/problemset/task/1735
@@ -319,11 +271,19 @@ void solve() {
 	}
 }
 
+// PRE-SUBMIT CHECKLIST
+// --------------------
+//
+// -- reset the global arrays
+// -- sort vector of vectors carefully
+// more to be added...
+
 int32_t main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
 	int t = 1;
 	// cin >> t;
-	for(int i = 1; i <= t; i++) {
-		// cout << "Case #" << i << ": ";
+	while(t--) {
 		solve();
 		cout << endl;
 		// cerr << endl;
