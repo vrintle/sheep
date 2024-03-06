@@ -15,6 +15,8 @@ template <typename T> using pbds = tree<T, null_type, less<T>, rb_tree_tag, tree
 #define pii pair<int, int>
 #define inf 2e18
 #define rep(n) for(int _ = 0; _ < n; _++)
+#define ff first
+#define ss second
 
 int max(int x, int y) { return x > y ? x : y; }
 int min(int x, int y) { return x < y ? x : y; }
