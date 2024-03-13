@@ -5,5 +5,5 @@ Useful tricks to remember while solving problems:
 - To factorize large numbers upto $10^{18}$, we must use Pollard Rho's algorithm, which works in $\mathcal{O}(n^{1/4})$.
 - Never compare floats/doubles with 128-bit integers in C++ (__int128). [https://codeforces.com/gym/101485/problem/K]
 - ![image](https://github.com/vrintle/sheep/assets/33773797/5b069f7d-cad3-4f27-89db-2a550809c97f)
-- Stars and Bars problem, but with (common) upper bound: https://math.stackexchange.com/questions/553960/
+- Stars and Bars problem, but with (common) upper bound: https://math.stackexchange.com/questions/553960/ [https://codeforces.com/gym/510395/problem/H]
 - More tricks will be added here..
