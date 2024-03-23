@@ -248,7 +248,6 @@ void solve() {
 	lazy_segtree<S, op, e, F, mapping, composition, id> st(init);
 	auto add = [&](int x) {
 		int r = st.max_right<chkone>(x);
-		if(st.prod(r, r + 1).val == 1) r++;
 		st.apply(x, r, F{0, 0});
 		st.apply(r, r + 1, F{0, 1});
 	};
@@ -259,7 +258,6 @@ void solve() {
 	}
 	auto del = [&](int x) {
 		int r = st.max_right<chkzero>(x);
-		if(st.prod(r, r + 1).val == 0) r++;
 		st.apply(x, r, F{0, 1});
 		st.apply(r, r + 1, F{0, 0});
 	};
