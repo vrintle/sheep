@@ -5,6 +5,8 @@
 //                                                           /////
 //////////////////////////////////////////////////////////////////
 
+// https://www.codechef.com/FEB17/problems/DISTNUM3
+
 #include <chrono>
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
